@@ -1,3 +1,4 @@
+import colors from 'colors';
 import dotenv from 'dotenv';
 import express from 'express';
 import morgan from 'morgan';
@@ -32,6 +33,6 @@ app.get('/api/v1/products/:id', (req, res) => {
 
 app.listen(port, () => {
 	console.log(
-		`Server running in ${process.env.NODE_ENV} mode on port ${port}.`
+		`Server running in ${process.env.NODE_ENV} mode on port ${port}.`.cyan.bold
 	);
 });

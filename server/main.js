@@ -4,7 +4,7 @@ import express from 'express';
 import morgan from 'morgan';
 
 import connectDB from '#config/db.config.js';
-import products from '#data/products.data.js';
+import productRoutes from '#routes/product.route.js';
 
 dotenv.config();
 
@@ -16,19 +16,12 @@ const app = express();
 
 app.use(morgan('dev'));
 
+app.use('/api/v1/products', productRoutes);
+
 app.get('/', (req, res) => {
 	res.json({
 		message: 'API is running...',
 	});
-});
-
-app.get('/api/v1/products', (req, res) => {
-	res.json(products);
-});
-
-app.get('/api/v1/products/:id', (req, res) => {
-	const product = products.find((p) => p._id === req.params.id);
-	res.json(product);
 });
 
 app.listen(port, () => {

@@ -15,7 +15,8 @@
 		"#config/*": "./server/config/*",
 		"#data/*": "./server/data/*",
 		"#models/*": "./server/models/*",
-		"#routes/*": "./server/routes/*"
+		"#routes/*": "./server/routes/*",
+		"#middlewares/*": "./server/middlewares/*"
 	},
 	"repository": {
 		"type": "git",

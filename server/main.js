@@ -4,6 +4,7 @@ import express from 'express';
 import morgan from 'morgan';
 
 import connectDB from '#config/db.config.js';
+import { errorHandler } from '#middlewares/error.middleware.js';
 import productRoutes from '#routes/product.route.js';
 
 dotenv.config();
@@ -16,13 +17,15 @@ const app = express();
 
 app.use(morgan('dev'));
 
-app.use('/api/v1/products', productRoutes);
-
 app.get('/', (req, res) => {
 	res.json({
 		message: 'API is running...',
 	});
 });
+
+app.use('/api/v1/products', productRoutes);
+
+app.use(errorHandler);
 
 app.listen(port, () => {
 	console.log(

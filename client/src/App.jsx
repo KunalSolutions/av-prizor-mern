@@ -2,6 +2,7 @@ import { Provider } from 'react-redux';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import Layout from '@components/Layout';
+import CartScreen from '@screens/Cart';
 import ErrorScreen from '@screens/Error';
 import HomeScreen from '@screens/Home';
 import ProductDetails from '@screens/ProductDetails';
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
 			{
 				path: '/product/:id',
 				element: <ProductDetails />,
+			},
+			{
+				path: '/cart',
+				element: <CartScreen />,
 			},
 		],
 	},

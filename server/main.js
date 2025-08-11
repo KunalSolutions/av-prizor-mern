@@ -6,6 +6,7 @@ import morgan from 'morgan';
 import connectDB from '#config/db.config.js';
 import { errorHandler } from '#middlewares/error.middleware.js';
 import productRoutes from '#routes/product.route.js';
+import userRoutes from '#routes/user.route.js';
 
 dotenv.config();
 
@@ -24,6 +25,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/v1/products', productRoutes);
+app.use('/api/v1/users', userRoutes);
 
 app.use(errorHandler);
 

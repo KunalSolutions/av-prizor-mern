@@ -5,6 +5,7 @@ import Layout from '@components/Layout';
 import CartScreen from '@screens/Cart';
 import ErrorScreen from '@screens/Error';
 import HomeScreen from '@screens/Home';
+import LoginScreen from '@screens/Login';
 import ProductDetails from '@screens/ProductDetails';
 import store from './store';
 
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
 			{
 				path: '/cart',
 				element: <CartScreen />,
+			},
+			{
+				path: '/login',
+				element: <LoginScreen />,
 			},
 		],
 	},

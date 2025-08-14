@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
+import CheckoutSteps from '@components/CheckoutSteps';
 import SelectInput from '@components/FormInput/SelectInput';
 import TextInput from '@components/FormInput/TextInput';
 import countries from '@data/countries';
@@ -30,6 +31,9 @@ const ShippingScreen = () => {
 	return (
 		<div className='mt-10'>
 			<div className='flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8'>
+				<div className='flex justify-center'>
+					<CheckoutSteps step1 step2 />
+				</div>
 				<div className='sm:mx-auto sm:w-full sm:max-w-sm'>
 					<h2 className='tracking-light mt-10 text-center text-2xl font-bold leading-9 text-slate-900'>
 						Shipping

@@ -14,6 +14,7 @@ import OrderScreen from '@screens/Order';
 import PaymentScreen from '@screens/PaymentScreen';
 import PlaceOrderScreen from '@screens/PlaceOrder';
 import ProductDetails from '@screens/ProductDetails';
+import ProfileScreen from '@screens/Profile';
 import RegisterScreen from '@screens/Register';
 import ShippingScreen from '@screens/Shipping';
 import store from './store';
@@ -63,6 +64,10 @@ const router = createBrowserRouter([
 					{
 						path: '/order/:id',
 						element: <OrderScreen />,
+					},
+					{
+						path: '/profile',
+						element: <ProfileScreen />,
 					},
 				],
 			},

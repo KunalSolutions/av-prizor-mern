@@ -16,6 +16,7 @@ import OrderListScreen from '@screens/OrderList';
 import PaymentScreen from '@screens/PaymentScreen';
 import PlaceOrderScreen from '@screens/PlaceOrder';
 import ProductDetails from '@screens/ProductDetails';
+import ProductListScreen from '@screens/ProductList';
 import ProfileScreen from '@screens/Profile';
 import RegisterScreen from '@screens/Register';
 import ShippingScreen from '@screens/Shipping';
@@ -80,6 +81,10 @@ const router = createBrowserRouter([
 					{
 						path: '/admin/orderlist',
 						element: <OrderListScreen />,
+					},
+					{
+						path: '/admin/productlist',
+						element: <ProductListScreen />,
 					},
 				],
 			},

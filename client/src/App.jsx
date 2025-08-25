@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+import AdminRoute from '@components/AdminRoute';
 import Layout from '@components/Layout';
 import PrivateRoute from '@components/PrivateRoute';
 import CartScreen from '@screens/Cart';
@@ -11,6 +12,7 @@ import ErrorScreen from '@screens/Error';
 import HomeScreen from '@screens/Home';
 import LoginScreen from '@screens/Login';
 import OrderScreen from '@screens/Order';
+import OrderListScreen from '@screens/OrderList';
 import PaymentScreen from '@screens/PaymentScreen';
 import PlaceOrderScreen from '@screens/PlaceOrder';
 import ProductDetails from '@screens/ProductDetails';
@@ -68,6 +70,16 @@ const router = createBrowserRouter([
 					{
 						path: '/profile',
 						element: <ProfileScreen />,
+					},
+				],
+			},
+			{
+				path: '',
+				element: <AdminRoute />,
+				children: [
+					{
+						path: '/admin/orderlist',
+						element: <OrderListScreen />,
 					},
 				],
 			},

@@ -16,6 +16,7 @@ import OrderListScreen from '@screens/OrderList';
 import PaymentScreen from '@screens/PaymentScreen';
 import PlaceOrderScreen from '@screens/PlaceOrder';
 import ProductDetails from '@screens/ProductDetails';
+import ProductEditScreen from '@screens/ProductEdit';
 import ProductListScreen from '@screens/ProductList';
 import ProfileScreen from '@screens/Profile';
 import RegisterScreen from '@screens/Register';
@@ -85,6 +86,10 @@ const router = createBrowserRouter([
 					{
 						path: '/admin/productlist',
 						element: <ProductListScreen />,
+					},
+					{
+						path: '/admin/product/:id/edit',
+						element: <ProductEditScreen />,
 					},
 				],
 			},

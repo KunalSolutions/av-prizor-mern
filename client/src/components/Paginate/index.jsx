@@ -4,14 +4,18 @@ import {
 } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
 
-const Paginate = ({ pages, page }) => {
+const Paginate = ({ pages, page, keyword = '' }) => {
 	return (
 		pages > 1 && (
 			<nav className='mt-20 flex items-center justify-between border-t border-gray-200 px-4 sm:px-0'>
 				<div className='-mt-px flex w-0 flex-1'>
 					{page > 1 ? (
 						<Link
-							to={`/page/${page - 1}`}
+							to={`${
+								keyword
+									? `/search/${keyword}/page/${page - 1}`
+									: `/page/${page - 1}`
+							}`}
 							className='inline-flex items-center border-t-2 border-transparent pr-1 pt-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700'>
 							<ArrowLongLeftIcon
 								aria-hidden='true'
@@ -44,7 +48,11 @@ const Paginate = ({ pages, page }) => {
 				<div className='-mt-px flex w-0 flex-1 justify-end'>
 					{page < pages ? (
 						<Link
-							to={`/page/${page + 1}`}
+							to={`${
+								keyword
+									? `/search/${keyword}/page/${page + 1}`
+									: `/page/${page + 1}`
+							}`}
 							className='inline-flex items-center border-t-2 border-transparent pl-1 pt-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700'>
 							Next
 							<ArrowLongRightIcon

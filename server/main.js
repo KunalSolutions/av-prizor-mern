@@ -18,7 +18,7 @@ dotenv.config();
 
 connectDB();
 
-const port = process.env.PORT || 5000;
+const port = https://av-prizor-backend.onrender.com || 5000;
 
 const app = express();
 
@@ -68,4 +68,5 @@ app.listen(port, () => {
 		`Server running in ${process.env.NODE_ENV} mode on port ${port}.`.cyan.bold
 	);
 });
+
 

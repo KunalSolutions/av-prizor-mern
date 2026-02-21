@@ -27,7 +27,7 @@ app.use(cookieParser()); // Cookies parsing and reading
 
 app.use(
   cors({
-    origin: "http://localhost:3000", // your frontend URL
+    origin: "https://avsi-solutions-59y9.vercel.app", // your frontend URL
     credentials: true,
   })
 );
@@ -68,3 +68,4 @@ app.listen(port, () => {
 		`Server running in ${process.env.NODE_ENV} mode on port ${port}.`.cyan.bold
 	);
 });
+

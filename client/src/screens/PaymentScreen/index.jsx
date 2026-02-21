@@ -54,7 +54,7 @@ const PaymentScreen = () => {
 									<label
 										htmlFor='paymentMethod'
 										className='block text-sm font-medium leading-6 text-slate-900'>
-										PayPal or Debit / Credit Card
+										Continue for cash on delivery
 									</label>
 								</div>
 

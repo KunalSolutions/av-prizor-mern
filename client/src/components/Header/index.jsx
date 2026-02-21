@@ -2,10 +2,10 @@ import { useState } from 'react';
 
 import DesktopMenu from './DesktopMenu';
 import Logo from './Logo';
-import MegaMenu from './MegaMenu';
 import MobileMenu from './MobileMenu';
 import MobileMenuIcon from './MobileMenuIcon';
 import SearchBar from './SearchBar';
+import Pages from './Pages';
 
 const Header = () => {
 	const [isOpen, setIsOpen] = useState(false);
@@ -16,6 +16,7 @@ const Header = () => {
 				<div className='relative flex h-14 w-full items-center justify-between sm:h-16'>
 					<div className='flex flex-1 items-center justify-between gap-10'>
 						<Logo />
+						<Pages />
 						<SearchBar />
 						<DesktopMenu />
 						<MobileMenuIcon isOpen={isOpen} setIsOpen={setIsOpen} />
@@ -25,7 +26,7 @@ const Header = () => {
 
 			<div>{isOpen && <MobileMenu setIsOpen={setIsOpen} />}</div>
 
-			<MegaMenu />
+			{/* <MegaMenu /> */}
 		</header>
 	);
 };

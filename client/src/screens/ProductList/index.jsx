@@ -10,7 +10,15 @@ import {
 import { toast } from 'react-toastify';
 
 const ProductListScreen = () => {
-	const { data: products, error, isLoading, refetch } = useGetProductsQuery();
+	const { data, error, isLoading, refetch } = useGetProductsQuery();
+
+	const products = Array.isArray(data)
+	? data
+	: Array.isArray(data?.products)
+	? data.products
+	: [];
+
+	console.log(data)
 
 	const [createProduct, { isLoading: loadingCreate }] =
 		useCreateProductMutation();
@@ -40,6 +48,7 @@ const ProductListScreen = () => {
 		}
 	};
 
+
 	return (
 		<div className='bg-white'>
 			<div className='mx-auto max-w-2xl px-4 pb-24 pt-16 sm:px-6 lg:max-w-7xl lg:px-8'>
@@ -48,12 +57,11 @@ const ProductListScreen = () => {
 						All Products
 					</h1>
 
-					<button
-						onClick={handleCreateProduct}
-						type='submit'
-						className='rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm transition-all hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50'>
-						{loadingCreate ? 'Loading...' : 'Create Product'}
-					</button>
+					<Link
+						to='/admin/product/create'
+						className='rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm transition-all hover:bg-indigo-700'>
+						Create Product
+					</Link>
 				</div>
 				{isLoading ? (
 					<Loader />
@@ -91,6 +99,9 @@ const ProductListScreen = () => {
 												className='px-3 py-3.5 text-left text-sm font-semibold text-gray-900'>
 												Brand
 											</th>
+											<th className='px-3 py-3.5 text-left text-sm font-semibold text-gray-900'>
+												Status
+											</th>
 											<th
 												scope='col'
 												className='relative py-3.5 pl-3 pr-4 sm:pr-0'>
@@ -116,6 +127,9 @@ const ProductListScreen = () => {
 												<td className='whitespace-nowrap px-3 py-4 text-sm text-gray-500'>
 													{product.brand}
 												</td>
+												<td className='whitespace-nowrap px-3 py-4 text-sm text-gray-500'>
+													</td>
+
 												<td className='relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0'>
 													<Link
 														to={`/admin/product/${product._id}/edit`}

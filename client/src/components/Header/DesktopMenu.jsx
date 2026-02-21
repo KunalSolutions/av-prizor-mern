@@ -1,9 +1,9 @@
 import {
 	Cog8ToothIcon,
 	ShoppingBagIcon,
-	TagIcon,
 	UserIcon,
 } from '@heroicons/react/24/outline';
+import { HiOutlineClipboardList } from "react-icons/hi";
 import { logout } from '@slices/authSlice';
 import { useLogoutMutation } from '@slices/userApiSlice';
 import { useEffect, useRef, useState } from 'react';
@@ -55,17 +55,26 @@ const DesktopMenu = () => {
 	}, []);
 
 	return (
-		<nav className='hidden items-center sm:ml-6 sm:flex sm:space-x-8'>
-			<MenuItem url='/categories' label='Categories' icon={TagIcon} />
+		<nav className='hidden items-center text-black sm:ml-6 sm:flex sm:space-x-8'>
 
 			<div className='flex items-center gap-2'>
 				<MenuItem url='/cart' label='Cart' icon={ShoppingBagIcon} />
 				{cartItems.length > 0 && (
-					<span className='min-w-5 rounded-full bg-indigo-700 text-center text-sm font-semibold text-white'>
+					<span className='min-w-5 rounded-full bg-indigo-500 text-center text-sm font-semibold text-white'>
 						{cartItems.length}
 					</span>
 				)}
 			</div>
+			
+			{/* ORDERS */}
+			<div className='flex items-center gap-2'>
+			<MenuItem 
+				url='/orders' 
+				label='Orders' 
+				icon={HiOutlineClipboardList} 
+			/>
+			</div>
+
 
 			{userInfo ? (
 				<div className='relative z-50' ref={menuRef}>

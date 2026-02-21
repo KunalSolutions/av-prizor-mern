@@ -1,7 +1,11 @@
 import Alert from '@components/Alert';
+import CategorySection from '@components/Category';
+import HeroSection from '@components/HeroSection';
 import Loader from '@components/Loader';
+import NewArrival from '@components/NewArrival';
 import Paginate from '@components/Paginate';
 import ProductCard from '@components/ProductCard';
+import ServiceSection from '@components/Service';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { useGetProductsQuery } from '@slices/productApiSlice';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -17,7 +21,11 @@ const HomeScreen = () => {
 	});
 
 	return (
+		<div>
+		<HeroSection id="#products" />
+
 		<section className='bg-white'>
+			
 			<div className='mx-auto max-w-7xl px-3 py-10 sm:px-6 lg:px-8'>
 				{isLoading ? (
 					<Loader />
@@ -36,7 +44,7 @@ const HomeScreen = () => {
 								{keyword ? `Search Results for ${keyword}` : 'Latest Products'}
 							</h1>
 						</div>
-						<div className='mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
+						<div className='mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4'>
 							{data.products.map((product) => (
 								<ProductCard key={product._id} product={product} />
 							))}
@@ -46,6 +54,10 @@ const HomeScreen = () => {
 				<Paginate pages={data?.pages} page={data?.page} />
 			</div>
 		</section>
+		{/* <CategorySection /> */}
+		{/* <NewArrival /> */}
+		<ServiceSection />
+		</div>
 	);
 };
 

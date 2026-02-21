@@ -4,12 +4,14 @@ import { toast } from 'react-toastify';
 
 import Alert from '@components/Alert';
 import Loader from '@components/Loader';
-import { useDeleteUserMutation, useGetUsersQuery } from '@slices/userApiSlice';
+import { useDeleteUserMutation, useGetUsersQuery, useCreateUserMutation } from '@slices/userApiSlice';
 
 const UserListScreen = () => {
 	const { data: users, error, isLoading, refetch } = useGetUsersQuery();
 
 	const [deleteUser, { isLoading: loadingDelete }] = useDeleteUserMutation();
+	const [createUser, { isLoading: loadingCreate }] = useCreateUserMutation();
+
 
 	const handleDelete = async (id) => {
 		if (window.confirm('Are you sure?')) {
@@ -23,6 +25,23 @@ const UserListScreen = () => {
 		}
 	};
 
+	const handleCreateUser = async () => {
+		try {
+			await createUser({
+				name: 'New User',
+				email: `user${Date.now()}@gmail.com`,
+				password: '123456',
+				isAdmin: false,
+			}).unwrap();
+
+			toast.success('User created successfully');
+			refetch();
+		} catch (error) {
+			toast.error(error?.data?.message || error?.error);
+		}
+	};
+
+
 	return (
 		<div className='bg-white'>
 			<div className='mx-auto max-w-2xl px-4 pb-24 pt-16 sm:px-6 lg:max-w-7xl lg:px-8'>
@@ -31,12 +50,12 @@ const UserListScreen = () => {
 						All Users
 					</h1>
 
-					<button
-						onClick={() => {}}
-						type='submit'
-						className='rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm transition-all hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50'>
+					<Link
+						to='/admin/user/create'
+						className='rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm transition-all hover:bg-indigo-700'>
 						Create User
-					</button>
+					</Link>
+
 				</div>
 
 				{isLoading ? (

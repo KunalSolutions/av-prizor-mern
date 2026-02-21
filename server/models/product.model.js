@@ -76,6 +76,10 @@ const productSchema = mongoose.Schema(
 			type: String,
 			required: [true, 'Product content is required'],
 		},
+		isActive: {
+		type: Boolean,
+		default: true,
+		},
 		reviews: [reviewSchema],
 	},
 	{

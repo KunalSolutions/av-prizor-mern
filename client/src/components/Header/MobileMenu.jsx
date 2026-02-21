@@ -13,12 +13,6 @@ const MobileMenu = ({ setIsOpen }) => {
 			<div className='h-2' />
 			<div>
 				<MenuItemMobile
-					url='/categories'
-					label='Categories'
-					icon={TagIcon}
-					closeMenu={setIsOpen}
-				/>
-				<MenuItemMobile
 					url='/login'
 					label='Login'
 					icon={UserIcon}

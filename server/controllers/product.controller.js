@@ -5,9 +5,9 @@ import ProductModel from '#models/product.model.js';
  * @route		GET /api/v1/products
  * @access	Public
  */
-const getProducts = async (req, res) => {
-	const pageSize = 2;
-	const page = +req.query.pageNumber || 1;
+	const getProducts = async (req, res) => {
+	const pageSize = 12; // 4 per row × 3 rows
+	const page = Number(req.query.pageNumber) || 1;
 
 	const keyword = req.query.keyword
 		? { name: { $regex: req.query.keyword, $options: 'i' } }
@@ -19,8 +19,13 @@ const getProducts = async (req, res) => {
 		.limit(pageSize)
 		.skip(pageSize * (page - 1));
 
-	res.json({ products, page, pages: Math.ceil(count / pageSize) });
-};
+	res.json({
+		products,
+		page,
+		pages: Math.ceil(count / pageSize),
+	});
+	};
+
 
 /**
  * @desc		Fetch single product by ID
@@ -37,23 +42,39 @@ const getProductById = async (req, res) => {
 	}
 };
 
+
 /**
  * @desc		Create product
  * @route		POST /api/v1/products
  * @access	Private/Admin
  */
 const createProduct = async (req, res) => {
+	const {
+		name,
+		price,
+		description,
+		image,
+		brand,
+		category,
+		countInStock,
+		rating,
+		numReviews,
+		content,
+	} = req.body;
+
 	const product = new ProductModel({
-		name: 'Sample name',
-		price: 0,
+		name,
+		price,
 		user: req.user._id,
-		image: '/images/sample.jpg',
-		brand: 'Sample brand',
-		category: 'Sample category',
-		countInStock: 0,
-		numReviews: 0,
-		description: 'Sample description',
-		content: 'Sample content',
+		image,
+		brand,
+		category,
+		countInStock,
+		rating: rating || 0,
+		numReviews: numReviews || 0,
+		description,
+		content,
+		isActive: true,
 	});
 
 	const createdProduct = await product.save();
@@ -75,6 +96,7 @@ const updateProduct = async (req, res) => {
 		category,
 		countInStock,
 		content,
+		isActive,
 	} = req.body;
 
 	const product = await ProductModel.findById(req.params.id);
@@ -88,6 +110,7 @@ const updateProduct = async (req, res) => {
 		product.category = category;
 		product.countInStock = countInStock;
 		product.content = content;
+		product.isActive = isActive;
 
 		const updatedProduct = await product.save();
 		res.json(updatedProduct);
@@ -155,6 +178,32 @@ const createProductReview = async (req, res) => {
 	}
 };
 
+/**
+ * @desc    Toggle product status
+ * @route   PUT /api/v1/products/:id/toggle
+ * @access  Private/Admin
+ */
+const toggleProductStatus = async (req, res) => {
+  const product = await ProductModel.findById(req.params.id);
+
+  if (product) {
+    product.isActive = !product.isActive;
+
+    const updatedProduct = await product.save();
+
+    res.json({
+      message: `Product ${
+        updatedProduct.isActive ? "Enabled" : "Disabled"
+      } successfully`,
+      product: updatedProduct,
+    });
+  } else {
+    res.status(404);
+    throw new Error("Product not found");
+  }
+};
+
+
 export {
 	createProduct,
 	createProductReview,
@@ -162,4 +211,5 @@ export {
 	getProductById,
 	getProducts,
 	updateProduct,
+	toggleProductStatus,
 };

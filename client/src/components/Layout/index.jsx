@@ -8,10 +8,11 @@ const Layout = () => {
 		<div className='flex min-h-screen flex-col bg-slate-100'>
 			<Header />
 
-			<div className='h-[56px] sm:h-[64px] lg:h-[106px]'></div>
+			<div className='h-[56px] sm:h-[64px] lg:h-[65px]'></div>
 
 			<div className='flex-grow'>
 				<Outlet />
+				
 			</div>
 
 			<Footer />

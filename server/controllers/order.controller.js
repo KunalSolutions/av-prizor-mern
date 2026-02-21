@@ -69,10 +69,11 @@ const getOrderById = async (req, res) => {
 	}
 };
 
+
 /**
- * @desc		Update order to paid
- * @route		PUT /api/orders/:id/pay
- * @access	Private
+ * @desc    Update order to paid
+ * @route   PUT /api/orders/:id/pay
+ * @access  Private
  */
 const updateOrderToPaid = async (req, res) => {
 	const order = await OrderModel.findById(req.params.id);
@@ -80,15 +81,15 @@ const updateOrderToPaid = async (req, res) => {
 	if (order) {
 		order.isPaid = true;
 		order.paidAt = Date.now();
+
 		order.paymentResult = {
-			id: req.body.id,
-			status: req.body.status,
-			update_time: req.body.update_time,
-			email_address: req.body.payer.email_address,
+			id: req.body?.id,
+			status: req.body?.status,
+			update_time: req.body?.update_time,
+			email_address: req.body?.payer?.email_address || '',
 		};
 
 		const updatedOrder = await order.save();
-
 		res.status(200).json(updatedOrder);
 	} else {
 		res.status(404);
@@ -97,9 +98,9 @@ const updateOrderToPaid = async (req, res) => {
 };
 
 /**
- * @desc		Update order to delivered
- * @route		PUT /api/orders/:id/deliver
- * @access	Private/Admin
+ * @desc    Update order to delivered
+ * @route   PUT /api/orders/:id/deliver
+ * @access  Private/Admin
  */
 const updateOrderToDelivered = async (req, res) => {
 	const order = await OrderModel.findById(req.params.id);
@@ -109,7 +110,6 @@ const updateOrderToDelivered = async (req, res) => {
 		order.deliveredAt = Date.now();
 
 		const updatedOrder = await order.save();
-
 		res.status(200).json(updatedOrder);
 	} else {
 		res.status(404);

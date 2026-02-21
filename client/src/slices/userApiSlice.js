@@ -17,11 +17,11 @@ export const userApiSlice = apiSlice.injectEndpoints({
 			}),
 		}),
 		register: builder.mutation({
-			query: (credentials) => ({
-				url: `${USERS_URL}`,
-				method: 'POST',
-				body: credentials,
-			}),
+		query: (credentials) => ({
+			url: `${USERS_URL}/register`,
+			method: 'POST',
+			body: credentials,
+		}),
 		}),
 		profile: builder.mutation({
 			query: (data) => ({
@@ -59,6 +59,14 @@ export const userApiSlice = apiSlice.injectEndpoints({
 			}),
 			invalidatesTags: ['User'],
 		}),
+		createUser: builder.mutation({
+		query: (data) => ({
+			url: `${USERS_URL}`,
+			method: 'POST',
+			body: data,
+		}),
+		invalidatesTags: ['User'],
+		}),
 	}),
 });
 
@@ -71,4 +79,5 @@ export const {
 	useDeleteUserMutation,
 	useGetUserDetailsQuery,
 	useUpdateUserMutation,
+	useCreateUserMutation,
 } = userApiSlice;

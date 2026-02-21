@@ -24,6 +24,13 @@ import ShippingScreen from '@screens/Shipping';
 import UserEditScreen from '@screens/UserEdit';
 import UserListScreen from '@screens/UserList';
 import store from './store';
+import Blog from '@components/Blog';
+import  Contact  from '@screens/Contact';
+import About from '@components/About';
+import Product from '@components/Product';
+import UserCreate from '@screens/UserCreate/UserCreate';
+import ProductCreate from '@screens/ProductCreate';
+import MyOrdersScreen from '@screens/MyOrder';
 
 const router = createBrowserRouter([
 	{
@@ -34,6 +41,7 @@ const router = createBrowserRouter([
 			{
 				index: true,
 				element: <HomeScreen />,
+				
 			},
 			{
 				path: '/page/:pageNumber',
@@ -52,8 +60,28 @@ const router = createBrowserRouter([
 				element: <ProductDetails />,
 			},
 			{
+				path: '/orders',
+				element: <MyOrdersScreen />,
+			},
+			{
 				path: '/cart',
 				element: <CartScreen />,
+			},
+			{
+				path: '/about',
+				element: <About />
+			},
+			{
+				path: '#products',
+				element: <Product />
+			},
+			{
+				path: '/blog',
+				element: <Blog />,
+			},
+			{
+				path: '/contact',
+				element: <Contact />,
 			},
 			{
 				path: '/login',
@@ -108,6 +136,14 @@ const router = createBrowserRouter([
 					{
 						path: '/admin/userlist',
 						element: <UserListScreen />,
+					},
+					{
+						path: '/admin/user/create',
+						element: <UserCreate />,
+					},
+					{
+						path: '/admin/product/create',
+						element: <ProductCreate />,
 					},
 					{
 						path: '/admin/user/:id/edit',

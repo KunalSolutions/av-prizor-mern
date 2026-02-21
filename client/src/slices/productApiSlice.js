@@ -4,13 +4,13 @@ import { apiSlice } from './apiSlice';
 export const productsApiSlice = apiSlice.injectEndpoints({
 	endpoints: (builder) => ({
 		getProducts: builder.query({
-			query: ({ keyword, pageNumber }) => ({
-				url: PRODUCTS_URL,
-				params: { keyword, pageNumber },
-			}),
-			keepUnusedDataFor: 5,
-			providesTags: ['Product'],
+		query: ({ keyword = '', pageNumber = '' } = {}) => ({
+			url: PRODUCTS_URL,
+			params: { keyword, pageNumber },
 		}),
+		keepUnusedDataFor: 5,
+		providesTags: ['Product'],
+	}),
 		getProductDetails: builder.query({
 			query: (productId) => ({
 				url: `${PRODUCTS_URL}/${productId}`,
@@ -19,11 +19,12 @@ export const productsApiSlice = apiSlice.injectEndpoints({
 			providesTags: ['Product'],
 		}),
 		createProduct: builder.mutation({
-			query: () => ({
-				url: PRODUCTS_URL,
-				method: 'POST',
-			}),
-			invalidatesTags: ['Product'],
+		query: (data) => ({
+			url: PRODUCTS_URL,
+			method: 'POST',
+			body: data,
+		}),
+		invalidatesTags: ['Product'],
 		}),
 		updateProduct: builder.mutation({
 			query: (data) => ({
@@ -55,7 +56,14 @@ export const productsApiSlice = apiSlice.injectEndpoints({
 			}),
 			invalidatesTags: ['Product'],
 		}),
-	}),
+		toggleProductStatus: builder.mutation({
+			query: (id) => ({
+				url: `${PRODUCTS_URL}/${id}/toggle`,
+				method: "PUT",
+			}),
+			invalidatesTags: ["Product"],
+		}),
+	})
 });
 
 export const {

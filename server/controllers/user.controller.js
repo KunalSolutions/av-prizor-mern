@@ -204,6 +204,29 @@ const updateUser = async (req, res) => {
 	}
 };
 
+// POST /api/users
+// Admin only
+const createUser = async (req, res) => {
+  const { name, email, password, isAdmin } = req.body;
+
+  const userExists = await UserModel.findOne({ email });
+
+  if (userExists) {
+    res.status(400);
+    throw new Error('User already exists');
+  }
+
+  const user = await UserModel.create({
+    name,
+    email,
+    password,
+    isAdmin,
+  });
+
+  res.status(201).json(user);
+};
+
+
 export {
 	authUser,
 	deleteUser,
@@ -214,4 +237,5 @@ export {
 	registerUser,
 	updateUser,
 	updateUserProfile,
+	createUser,
 };

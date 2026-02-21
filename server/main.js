@@ -3,6 +3,7 @@ import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 import express from 'express';
 import morgan from 'morgan';
+import cors from "cors";
 import path from 'path';
 
 import connectDB from '#config/db.config.js';
@@ -11,6 +12,7 @@ import orderRoutes from '#routes/order.route.js';
 import productRoutes from '#routes/product.route.js';
 import uploadRoutes from '#routes/upload.route.js';
 import userRoutes from '#routes/user.route.js';
+import contactRoutes from "./routes/contactRoutes.js";
 
 dotenv.config();
 
@@ -23,12 +25,20 @@ const app = express();
 app.use(express.json()); // Request body parsing
 app.use(cookieParser()); // Cookies parsing and reading
 
+app.use(
+  cors({
+    origin: "http://localhost:3000", // your frontend URL
+    credentials: true,
+  })
+);
+
 app.use(morgan('dev'));
 
 app.use('/api/v1/products', productRoutes);
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/orders', orderRoutes);
 app.use('/api/v1/upload', uploadRoutes);
+app.use("/api/contact", contactRoutes);
 
 app.get('/api/v1/config/paypal', (req, res) => {
 	res.json({ clientId: process.env.PAYPAL_CLIENT_ID });

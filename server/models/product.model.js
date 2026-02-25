@@ -1,93 +1,166 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
-const reviewSchema = mongoose.Schema(
-	{
-		user: {
-			type: mongoose.Schema.Types.ObjectId,
-			required: [true, 'User ID is required'],
-			ref: 'UserModel',
-		},
-		name: {
-			type: String,
-			required: [true, 'User name is required'],
-		},
-		rating: {
-			type: Number,
-			required: [true, 'Review rating is required'],
-			default: 0,
-		},
-		comment: {
-			type: String,
-			required: [true, 'Review comment is required'],
-		},
-	},
-	{
-		timestamps: true,
-	}
+/* =========================
+   REVIEW SCHEMA
+========================= */
+const reviewSchema = new mongoose.Schema(
+  {
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "UserModel",
+    },
+    name: {
+      type: String,
+      required: true,
+    },
+    rating: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+    comment: {
+      type: String,
+      required: true,
+    },
+  },
+  {
+    timestamps: true,
+  }
 );
 
-const productSchema = mongoose.Schema(
-	{
-		user: {
-			type: mongoose.Schema.Types.ObjectId,
-			required: [true, 'User ID is required'],
-			ref: 'UserModel',
-		},
-		name: {
-			type: String,
-			required: [true, 'Product name is required'],
-		},
-		price: {
-			type: Number,
-			required: [true, 'Product price is required'],
-		},
-		description: {
-			type: String,
-			required: [true, 'Product description is required'],
-		},
-		image: {
-			type: String,
-			required: [true, 'Product image is required'],
-		},
-		category: {
-			type: String,
-			required: [true, 'Product category is required'],
-		},
-		brand: {
-			type: String,
-			required: [true, 'Product brand is required'],
-		},
-		countInStock: {
-			type: Number,
-			required: [true, 'Product count in stock is required'],
-			default: 0,
-		},
-		rating: {
-			type: Number,
-			required: [true, 'Product rating is required'],
-			default: 0,
-		},
-		numReviews: {
-			type: Number,
-			required: [true, 'Product number of reviews is required'],
-			default: 0,
-		},
-		content: {
-			type: String,
-			required: [true, 'Product content is required'],
-		},
-		isActive: {
-		type: Boolean,
-		default: true,
-		},
-		reviews: [reviewSchema],
-	},
-	{
-		timestamps: true,
-		collection: 'products',
-	}
+/* =========================
+   VARIANT SCHEMA (For TV Sizes)
+========================= */
+const variantSchema = new mongoose.Schema(
+  {
+    size: {
+      type: String, // 32, 43, 55, 65, 75
+      required: true,
+    },
+    price: {
+      type: Number,
+      required: true,
+    },
+    offerPrice: {
+      type: Number,
+      default: 0,
+    },
+    countInStock: {
+      type: Number,
+      default: 0,
+    },
+  },
+  { _id: false }
 );
 
-const ProductModel = mongoose.model('ProductModel', productSchema);
+/* =========================
+   PRODUCT SCHEMA
+========================= */
+const productSchema = new mongoose.Schema(
+  {
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "UserModel",
+      required: true,
+    },
+
+    name: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
+    // ✅ For normal products (connectors, mic, etc.)
+    price: {
+      type: Number,
+      default: 0,
+    },
+
+    offerPrice: {
+      type: Number,
+      default: 0,
+    },
+
+    countInStock: {
+      type: Number,
+      default: 0,
+    },
+
+    // ✅ For variant products (TV with sizes)
+    variants: {
+      type: [variantSchema],
+      default: [],
+    },
+
+    description: {
+      type: String,
+      required: true,
+    },
+
+    content: {
+      type: String,
+      required: true,
+    },
+
+    image: {
+      type: String,
+      required: true,
+    },
+
+    section: {
+      type: String,
+      required: true,
+    },
+
+    category: {
+      type: String,
+      required: true,
+    },
+
+    subcategory: {
+      type: String,
+      required: true,
+    },
+
+    brand: {
+      type: String,
+      required: true,
+    },
+
+    rating: {
+      type: Number,
+      default: 0,
+    },
+
+    numReviews: {
+      type: Number,
+      default: 0,
+    },
+
+    isTopDeal: {
+      type: Boolean,
+      default: false,
+    },
+
+    isBestSeller: {
+      type: Boolean,
+      default: false,
+    },
+
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
+
+    reviews: [reviewSchema],
+  },
+  {
+    timestamps: true,
+    collection: "products",
+  }
+);
+
+const ProductModel = mongoose.model("ProductModel", productSchema);
 
 export default ProductModel;

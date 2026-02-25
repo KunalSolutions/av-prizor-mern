@@ -1,81 +1,112 @@
-import React from 'react'
+import React from "react";
 
 const Blog = () => {
   return (
-    <section class="py-12 bg-white sm:py-16 lg:py-20">
-  <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+    <section className="py-12 bg-white sm:py-16 lg:py-20">
+      <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
 
-    <div class="text-center">
-      <h2 class="text-3xl font-bold leading-tight text-[#00000] sm:text-4xl xl:text-5xl">
-        Experience Next-Gen Display Technology
-      </h2>
-      <p class="text-xs leading-7 text-gray-600 sm:mt-8">
-        PRIZOR TVs & Monitors deliver crystal-clear visuals, immersive sound, and premium build quality.
-      </p>
-    </div>
+        {/* Heading */}
+        <div className="text-center max-w-3xl mx-auto">
+          <h2 className="text-3xl font-bold leading-tight text-black sm:text-4xl xl:text-5xl">
+            Latest Insights From Our Electronics Store
+          </h2>
+          <p className="mt-4 text-gray-600 text-sm sm:text-base">
+            Discover buying guides, product highlights, and expert tips to help you choose 
+            the best TVs, speakers, and electronic accessories for your needs.
+          </p>
+        </div>
 
-    <div class="grid grid-cols-1 mt-10 text-center sm:mt-16 sm:grid-cols-2 gap-y-12 md:grid-cols-3 xl:mt-24">
+        {/* Blog Grid */}
+        <div className="grid grid-cols-1 mt-12 text-center sm:grid-cols-2 md:grid-cols-3 gap-y-12 gap-x-8">
 
-      {/* <!-- 4K Resolution --> */}
-      <div class="md:p-8 lg:p-14">
-        <h3 class="mt-6 text-xl font-bold text-indigo-500">4K Ultra HD Display</h3>
-        <p class="mt-4 text-base text-gray-600">
-          Enjoy lifelike clarity with 1080P & 4K resolution support. 
-          10-bit image processing ensures vibrant colors and stunning detail.
-        </p>
+          {/* Blog 1 */}
+          <div className="p-6 rounded-xl  transition duration-300">
+            <h3 className="text-xl font-semibold text-indigo-600">
+              How to Choose the Perfect 4K TV
+            </h3>
+            <p className="mt-4 text-gray-600 text-sm">
+              Learn about display size, resolution, refresh rate, and smart features 
+              before investing in your next home entertainment upgrade.
+            </p>
+            <button className="mt-4 text-sm font-medium underline hover:text-black">
+              Read More →
+            </button>
+          </div>
+
+          {/* Blog 2 */}
+          <div className="p-6 rounded-xl  transition duration-300">
+            <h3 className="text-xl font-semibold text-indigo-600">
+              Best Sound Systems for Home & Office
+            </h3>
+            <p className="mt-4 text-gray-600 text-sm">
+              Explore powerful speakers, amplifiers, and audio setups that deliver 
+              immersive sound quality for music, movies, and meetings.
+            </p>
+            <button className="mt-4 text-sm font-medium underline hover:text-black">
+              Read More →
+            </button>
+          </div>
+
+          {/* Blog 3 */}
+          <div className="p-6 rounded-xl  transition duration-300">
+            <h3 className="text-xl font-semibold text-indigo-600">
+              Essential Accessories You Shouldn’t Ignore
+            </h3>
+            <p className="mt-4 text-gray-600 text-sm">
+              From HDMI cables to wall mounts and surge protectors, 
+              discover must-have accessories that complete your setup.
+            </p>
+            <button className="mt-4 text-sm font-medium underline hover:text-black">
+              Read More →
+            </button>
+          </div>
+
+          {/* Blog 4 */}
+          <div className="p-6 rounded-xl  transition duration-300">
+            <h3 className="text-xl font-semibold text-indigo-600">
+              Smart Devices for Modern Living
+            </h3>
+            <p className="mt-4 text-gray-600 text-sm">
+              Upgrade your lifestyle with smart TVs, streaming devices, 
+              and connected gadgets designed for convenience and efficiency.
+            </p>
+            <button className="mt-4 text-sm font-medium underline hover:text-black">
+              Read More →
+            </button>
+          </div>
+
+          {/* Blog 5 */}
+          <div className="p-6 rounded-xl  transition duration-300">
+            <h3 className="text-xl font-semibold text-indigo-600">
+              Gaming Setup Guide for Beginners
+            </h3>
+            <p className="mt-4 text-gray-600 text-sm">
+              Build the ultimate gaming experience with high refresh rate monitors, 
+              surround sound systems, and optimized connectivity.
+            </p>
+            <button className="mt-4 text-sm font-medium underline hover:text-black">
+              Read More →
+            </button>
+          </div>
+
+          {/* Blog 6 */}
+          <div className="p-6 rounded-xl  transition duration-300">
+            <h3 className="text-xl font-semibold text-indigo-600">
+              Energy-Efficient Electronics Explained
+            </h3>
+            <p className="mt-4 text-gray-600 text-sm">
+              Understand power ratings, eco modes, and smart energy-saving 
+              features that help reduce electricity bills.
+            </p>
+            <button className="mt-4 text-sm font-medium underline hover:text-black">
+              Read More →
+            </button>
+          </div>
+
+        </div>
       </div>
+    </section>
+  );
+};
 
-      {/* <!-- Dolby Audio --> */}
-      <div class="md:p-8 lg:p-14 md:border-l md:border-gray-200">
-        <h3 class="mt-6 text-xl font-bold text-indigo-500">Dolby & DTS Audio</h3>
-        <p class="mt-4 text-base text-gray-600">
-          Built-in 12W speakers with Dolby Audio & DTS Virtual X 
-          provide immersive cinematic sound experience.
-        </p>
-      </div>
-
-      {/* <!-- Connectivity --> */}
-      <div class="md:p-8 lg:p-14 md:border-l md:border-gray-200">
-        <h3 class="mt-6 text-xl font-bold text-indigo-500">Multiple Connectivity</h3>
-        <p class="mt-4 text-base text-gray-600">
-          Equipped with HDMI, VGA & USB ports for seamless 
-          connection to gaming consoles, laptops & streaming devices.
-        </p>
-      </div>
-
-      {/* <!-- Frameless Design --> */}
-      <div class="md:p-8 lg:p-14  md:border-gray-200">
-        <h3 class="mt-6 text-xl font-bold text-indigo-500">Frameless Premium Design</h3>
-        <p class="mt-4 text-base text-gray-600">
-          Elegant frameless panels deliver wider viewing angles 
-          and modern aesthetics for homes & offices.
-        </p>
-      </div>
-
-      {/* <!-- Industrial Performance --> */}
-      <div class="md:p-8 lg:p-14 md:border-l md:border-gray-200 ">
-        <h3 class="mt-6 text-xl font-bold text-indigo-500">Industrial Grade Performance</h3>
-        <p class="mt-4 text-base text-gray-600">
-          Designed for 24×365 uninterrupted operation with 
-          high brightness, high contrast and durable components.
-        </p>
-      </div>
-
-      {/* <!-- Energy Efficient --> */}
-      <div class="md:p-8 lg:p-14 md:border-l md:border-gray-200 ">
-        <h3 class="mt-6 text-xl font-bold text-indigo-500">Energy Efficient & Eye Safe</h3>
-        <p class="mt-4 text-base text-gray-600">
-          Low energy consumption, zero radiation technology 
-          ensures safe and comfortable viewing experience.
-        </p>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-
-  )
-}
-
-export default Blog
+export default Blog;

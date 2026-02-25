@@ -1,185 +1,213 @@
-import ProductModel from '#models/product.model.js';
+import ProductModel from "#models/product.model.js";
 
 /**
- * @desc		Fetch all products
- * @route		GET /api/v1/products
- * @access	Public
+ * @desc    Fetch all products (with search + pagination)
+ * @route   GET /api/v1/products
+ * @access  Public
  */
-	const getProducts = async (req, res) => {
-	const pageSize = 12; // 4 per row × 3 rows
-	const page = Number(req.query.pageNumber) || 1;
+const getProducts = async (req, res) => {
+  const pageSize = 12;
+  const page = Number(req.query.pageNumber) || 1;
 
-	const keyword = req.query.keyword
-		? { name: { $regex: req.query.keyword, $options: 'i' } }
-		: {};
+  const keyword = req.query.keyword
+    ? { name: { $regex: req.query.keyword, $options: "i" } }
+    : {};
 
-	const count = await ProductModel.countDocuments({ ...keyword });
+  const count = await ProductModel.countDocuments({ ...keyword, isActive: true });
 
-	const products = await ProductModel.find({ ...keyword })
-		.limit(pageSize)
-		.skip(pageSize * (page - 1));
+  const products = await ProductModel.find({ ...keyword, isActive: true })
+    .limit(pageSize)
+    .skip(pageSize * (page - 1));
 
-	res.json({
-		products,
-		page,
-		pages: Math.ceil(count / pageSize),
-	});
-	};
-
+  res.json({
+    products,
+    page,
+    pages: Math.ceil(count / pageSize),
+  });
+};
 
 /**
- * @desc		Fetch single product by ID
- * @route		GET /api/v1/products/:id
- * @access	Public
+ * @desc    Fetch Top Deals
+ * @route   GET /api/v1/products/top-deals
+ * @access  Public
+ */
+const getTopDeals = async (req, res) => {
+  const products = await ProductModel.find({
+    isTopDeal: true,
+    isActive: true,
+  });
+
+  res.json(products);
+};
+
+/**
+ * @desc    Fetch products by category
+ * @route   GET /api/v1/products/category/:category
+ * @access  Public
+ */
+const getProductsByCategory = async (req, res) => {
+  const products = await ProductModel.find({
+    category: { $regex: `^${req.params.category}$`, $options: "i" },
+    isActive: true,
+  });
+
+  res.json(products);
+};
+
+/**
+ * @desc    Fetch Top Rated Products (numReviews > 50)
+ * @route   GET /api/v1/products/top-rated
+ * @access  Public
+ */
+const getTopRatedProducts = async (req, res) => {
+  const products = await ProductModel.find({
+    numReviews: { $gt: 50 },
+    isActive: true,
+  }).sort({ rating: -1 });
+
+  res.json(products);
+};
+
+/**
+ * @desc    Fetch single product
+ * @route   GET /api/v1/products/:id
+ * @access  Public
  */
 const getProductById = async (req, res) => {
-	const product = await ProductModel.findById(req.params.id);
-	if (product) {
-		res.json(product);
-	} else {
-		res.status(404);
-		throw new Error('Product not found.');
-	}
+  const product = await ProductModel.findById(req.params.id);
+
+  if (product) {
+    res.json(product);
+  } else {
+    res.status(404);
+    throw new Error("Product not found");
+  }
 };
 
-
 /**
- * @desc		Create product
- * @route		POST /api/v1/products
- * @access	Private/Admin
+ * @desc    Create product
+ * @route   POST /api/v1/products
+ * @access  Private/Admin
  */
 const createProduct = async (req, res) => {
-	const {
-		name,
-		price,
-		description,
-		image,
-		brand,
-		category,
-		countInStock,
-		rating,
-		numReviews,
-		content,
-	} = req.body;
+  const {
+    name,
+    price,
+    offerPrice,
+    description,
+    image,
+    brand,
+    category,
+    section,
+    subcategory,
+    countInStock,
+    content,
+    isTopDeal,
+    isBestSeller,
+    variants, 
+  } = req.body;
 
-	const product = new ProductModel({
-		name,
-		price,
-		user: req.user._id,
-		image,
-		brand,
-		category,
-		countInStock,
-		rating: rating || 0,
-		numReviews: numReviews || 0,
-		description,
-		content,
-		isActive: true,
-	});
+  const product = new ProductModel({
+    name,
+    price,
+    offerPrice,
+    user: req.user._id,
+    image,
+    brand,
+    category,
+    section,
+    subcategory,
+    countInStock,
+    description,
+    content,
+    isTopDeal,
+    isBestSeller,
+    variants: variants || [], 
+    isActive: true,
+  });
 
-	const createdProduct = await product.save();
-	res.status(201).json(createdProduct);
+  const createdProduct = await product.save();
+  res.status(201).json(createdProduct);
 };
-
 /**
- * @desc		Update product
- * @route		PUT /api/v1/products/:id
- * @access	Private/Admin
+ * @desc    Update product
+ * @route   PUT /api/v1/products/:id
+ * @access  Private/Admin
  */
 const updateProduct = async (req, res) => {
-	const {
-		name,
-		price,
-		description,
-		image,
-		brand,
-		category,
-		countInStock,
-		content,
-		isActive,
-	} = req.body;
+  const product = await ProductModel.findById(req.params.id);
 
-	const product = await ProductModel.findById(req.params.id);
-
-	if (product) {
-		product.name = name;
-		product.price = price;
-		product.description = description;
-		product.image = image;
-		product.brand = brand;
-		product.category = category;
-		product.countInStock = countInStock;
-		product.content = content;
-		product.isActive = isActive;
-
-		const updatedProduct = await product.save();
-		res.json(updatedProduct);
-	} else {
-		res.status(404);
-		throw new Error('Product not found');
-	}
+  if (product) {
+    Object.assign(product, req.body);
+    const updatedProduct = await product.save();
+    res.json(updatedProduct);
+  } else {
+    res.status(404);
+    throw new Error("Product not found");
+  }
 };
 
 /**
- * @desc		Delete product
- * @route		DELETE /api/v1/products/:id
- * @access	Private/Admin
+ * @desc    Delete product
+ * @route   DELETE /api/v1/products/:id
+ * @access  Private/Admin
  */
 const deleteProduct = async (req, res) => {
-	const product = await ProductModel.findById(req.params.id);
+  const product = await ProductModel.findById(req.params.id);
 
-	if (product) {
-		await ProductModel.deleteOne({ _id: req.params.id });
-		res.status(200).json({ message: 'Product deleted' });
-	} else {
-		res.status(404);
-		throw new Error('Product not found!');
-	}
+  if (product) {
+    await ProductModel.deleteOne({ _id: req.params.id });
+    res.json({ message: "Product deleted" });
+  } else {
+    res.status(404);
+    throw new Error("Product not found");
+  }
 };
 
 /**
- * @desc		Create a new review
- * @route		POST /api/v1/products/:id/reviews
- * @access	Private
+ * @desc    Create review
+ * @route   POST /api/v1/products/:id/reviews
+ * @access  Private
  */
 const createProductReview = async (req, res) => {
-	const { rating, comment } = req.body;
+  const { rating, comment } = req.body;
 
-	const product = await ProductModel.findById(req.params.id);
+  const product = await ProductModel.findById(req.params.id);
 
-	if (product) {
-		const alreadyReviewed = product.reviews.find(
-			(review) => review.user._id.toString() === req.user._id.toString()
-		);
+  if (product) {
+    const alreadyReviewed = product.reviews.find(
+      (review) => review.user.toString() === req.user._id.toString()
+    );
 
-		if (alreadyReviewed) {
-			res.status(400);
-			throw new Error('Product already reviewed!');
-		}
+    if (alreadyReviewed) {
+      res.status(400);
+      throw new Error("Product already reviewed");
+    }
 
-		const review = {
-			name: req.user.name,
-			rating: +rating,
-			comment,
-			user: req.user._id,
-		};
+    const review = {
+      name: req.user.name,
+      rating: Number(rating),
+      comment,
+      user: req.user._id,
+    };
 
-		product.reviews.push(review);
-		product.numReviews = product.reviews.length;
-		product.rating =
-			product.reviews.reduce((acc, currVal) => currVal.rating + acc, 0) /
-			product.reviews.length;
+    product.reviews.push(review);
+    product.numReviews = product.reviews.length;
 
-		await product.save();
-		res.status(201).json({ message: 'Review added' });
-	} else {
-		res.status(404);
-		throw new Error('Product not found');
-	}
+    product.rating =
+      product.reviews.reduce((acc, item) => item.rating + acc, 0) /
+      product.reviews.length;
+
+    await product.save();
+    res.status(201).json({ message: "Review added" });
+  } else {
+    res.status(404);
+    throw new Error("Product not found");
+  }
 };
 
 /**
- * @desc    Toggle product status
+ * @desc    Toggle product active status
  * @route   PUT /api/v1/products/:id/toggle
  * @access  Private/Admin
  */
@@ -188,7 +216,6 @@ const toggleProductStatus = async (req, res) => {
 
   if (product) {
     product.isActive = !product.isActive;
-
     const updatedProduct = await product.save();
 
     res.json({
@@ -203,13 +230,15 @@ const toggleProductStatus = async (req, res) => {
   }
 };
 
-
 export {
-	createProduct,
-	createProductReview,
-	deleteProduct,
-	getProductById,
-	getProducts,
-	updateProduct,
-	toggleProductStatus,
+  getProducts,
+  getProductById,
+  getTopDeals,
+  getProductsByCategory,
+  getTopRatedProducts,
+  createProduct,
+  updateProduct,
+  deleteProduct,
+  createProductReview,
+  toggleProductStatus,
 };

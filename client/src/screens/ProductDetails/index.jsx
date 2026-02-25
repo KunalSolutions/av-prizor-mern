@@ -1,293 +1,218 @@
-import { ArrowUturnLeftIcon, StarIcon } from '@heroicons/react/24/outline';
-import { useState } from 'react';
-import ReactMarkdown from 'react-markdown';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { useParams } from "react-router-dom";
+import { useGetProductDetailsQuery } from "@slices/productApiSlice";
+import { useDispatch } from "react-redux";
+import { addToCart } from "@slices/cartSlice";
+import Loader from "@components/Loader";
+import Alert from "@components/Alert";
+import { useState, useEffect } from "react";
+import { FaArrowLeft } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
-import Alert from '@components/Alert';
-import Loader from '@components/Loader';
-import Rating from '@components/ProductCard/Rating';
-import { addToCart } from '@slices/cartSlice';
-import {
-	useCreateReviewMutation,
-	useGetProductDetailsQuery,
-} from '@slices/productApiSlice';
-import QuantitySelector from './QuantitySelector';
+const ProductScreen = () => {
+  const { id } = useParams();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-const ProductDetails = () => {
-	const { id: productId } = useParams();
-	const dispatch = useDispatch();
-	const navigate = useNavigate();
+  const [qty, setQty] = useState(1);
+  const [selectedVariant, setSelectedVariant] = useState(null);
 
-	const [qty, setQty] = useState(1);
-	const [rating, setRating] = useState(1);
-	const [comment, setComment] = useState('');
+  const { data: product, isLoading, isError, error } =
+    useGetProductDetailsQuery(id);
 
-	const {
-		data: product,
-		isLoading,
-		isError,
-		error,
-		refetch,
-	} = useGetProductDetailsQuery(productId);
+  // If product has variants, select first by default
+  useEffect(() => {
+    if (product?.variants?.length > 0) {
+      setSelectedVariant(product.variants[0]);
+    }
+  }, [product]);
 
-	const [createProductReview, { isLoading: loadingProductReview }] =
-		useCreateReviewMutation();
+  const currentPrice =
+  selectedVariant?.offerPrice ??
+  selectedVariant?.price ??
+  product?.offerPrice ??
+  product?.price ??
+  0;
 
-	const { userInfo } = useSelector((state) => state.auth);
+  const currentOriginalPrice =
+    selectedVariant?.price ??
+    product?.price ??
+    0;
 
-	const handleAddToCart = () => {
-		dispatch(addToCart({ ...product, qty }));
-		navigate('/cart');
+  const currentStock =
+    selectedVariant?.countInStock ?? product?.countInStock;
+
+  const addToCartHandler = () => {
+    dispatch(
+      addToCart({
+        ...product,
+        qty,
+        selectedSize: selectedVariant?.size || null,
+        price: currentPrice,
+        countInStock: currentStock,
+      })
+    );
+  };
+
+  const handleCheckout = () => {
+		navigate('/login?redirect=/shipping');
 	};
 
-	const handleReviewSubmit = async (e) => {
-		e.preventDefault();
-		try {
-			await createProductReview({
-				productId,
-				rating,
-				comment,
-				user: userInfo._id,
-				name: userInfo.name,
-			}).unwrap();
-			toast.success('Review submitted successfully');
-			setRating(1);
-			setComment('');
-			refetch();
-		} catch (error) {
-			toast.error(error?.data?.message || error?.error);
-		}
-	};
+  if (isLoading) return <Loader />;
+  if (isError) return <Alert type="error">{error?.data?.message}</Alert>;
 
-	return (
-		<div className='bg-white pb-16 pt-6 sm:pb-24'>
-			<div className='mx-auto max-w-2xl px-4 sm:px-6 lg:max-w-7xl lg:px-8'>
-				{isLoading ? (
-					<Loader />
-				) : isError ? (
-					<Alert value='error'>{error.data?.message || error?.error}</Alert>
-				) : (
-					<>
-						<Link
-							to='/'
-							className='mb-5 inline-flex items-center gap-1.5 text-sm font-medium text-slate-500 hover:text-slate-700'>
-							<ArrowUturnLeftIcon className='h-3.5 w-3.5' />
-							Back
-						</Link>
-						<div className='lg:grid lg:auto-rows-min lg:grid-cols-12 lg:gap-x-8'>
-							{/* Image */}
-							<div className='mt-8 lg:col-span-7 lg:mt-0'>
-								<h2 className='sr-only'>Images</h2>
-								<img
-									src={product.image}
-									alt={product.name}
-									className='rounded-lg'
-								/>
-							</div>
 
-							<div className='lg:col-span-5 lg:col-start-8'>
-								{/* Category, Brand, Name, Price */}
-								<h6 className='inline-block rounded-full border border-slate-300 px-3 py-0.5 text-xs font-medium text-slate-500'>
-									{product.category}
-								</h6>
-								<h6 className='mt-8 text-sm font-semibold text-indigo-700'>
-									{product.brand}
-								</h6>
-								<div className='mt-1 flex justify-between'>
-									<h1 className='text-2xl font-medium text-slate-900'>
-										{product.name}
-									</h1>
-									<p className='text-2xl font-medium text-slate-900'>
-										₹{product.price}
-									</p>
-								</div>
+return (
+  <div className="max-w-7xl mx-auto px-4 py-10">
 
-								{/* Rating */}
-								<div className='my-1 flex items-center gap-0'>
-									<Rating value={product.rating} />
-									<span className='ml-8 mt-0.5 text-sm font-semibold text-slate-700'>
-										{product.numReviews} reviews
-									</span>
-								</div>
+    {/* BACK BUTTON */}
+    <button
+      onClick={() => navigate(-1)}
+      className="flex items-center gap-2 text-sm text-gray-600 hover:text-black mb-6"
+    >
+      <FaArrowLeft />
+      Back
+    </button>
 
-								{/* Description */}
-								<div className='mt-10'>
-									<div className='prose prose-sm mt-4 text-slate-500'>
-										{product.description}
-									</div>
-								</div>
+    {/* MAIN SECTION */}
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
 
-								{product.countInStock > 0 && (
-									<QuantitySelector
-										countInStock={product.countInStock}
-										quantity={qty}
-										setQuantity={setQty}
-									/>
-								)}
+      {/* LEFT - IMAGE */}
+      <div className="lg:col-span-5">
+        <div className="bg-white rounded-xl p-8">
+          <img
+            src={product.image}
+            alt={product.name}
+            className="w-full h-[480px] object-contain"
+          />
+        </div>
+      </div>
 
-								<button
-									type='submit'
-									onClick={handleAddToCart}
-									disabled={product.countInStock === 0}
-									className={`mt-8 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ${
-										product.countInStock === 0 &&
-										'cursor-not-allowed opacity-30 hover:bg-indigo-600'
-									}`}>
-									Add to cart
-								</button>
+      {/* RIGHT - PRODUCT CONTENT */}
+      <div className="lg:col-span-7">
 
-								{/* Content */}
-								<div className='mt-10 border-t border-gray-200 pt-8'>
-									<h2 className='text-sm font-medium text-slate-500'>
-										Description
-									</h2>
+        <h1 className="text-3xl font-bold text-indigo-700 leading-snug">
+          {product.name}
+        </h1>
 
-									<div className='prose prose-sm mt-4 text-slate-500'>
-										<ReactMarkdown>{product.content}</ReactMarkdown>
-									</div>
-								</div>
-							</div>
-						</div>
+        <p className="text-sm text-gray-500 mt-2">
+          Category: {product.category}
+        </p>
 
-						{/* Reviews */}
-						<div className='mt-16'>
-							<h2 className='text-lg font-medium text-gray-900'>
-								Recent reviews
-							</h2>
-							{product?.reviews?.length === 0 ? (
-								<p className='mt-5 text-base font-medium text-gray-500'>
-									No reviews yet
-								</p>
-							) : (
-								<div className='mt-6 space-y-10 divide-y divide-gray-200 border-b border-t border-gray-200 pb-10'>
-									{product.reviews.map((review) => (
-										<div
-											key={review.id}
-											className='pt-10 lg:grid lg:grid-cols-12 lg:gap-x-8'>
-											<div className='lg:col-span-8 lg:col-start-5 xl:col-span-9 xl:col-start-4 xl:grid xl:grid-cols-3 xl:items-start xl:gap-x-8'>
-												<div className='flex items-center xl:col-span-1'>
-													<div className='flex items-center'>
-														{[0, 1, 2, 3, 4].map((rating) => (
-															<StarIcon
-																key={rating}
-																className={`${
-																	review.rating > rating
-																		? 'text-yellow-400'
-																		: 'text-gray-200'
-																} h-5 w-5 flex-shrink-0`}
-															/>
-														))}
-													</div>
-													<p className='ml-3 text-sm text-gray-700'>
-														{review.rating}
-														<span className='sr-only'> out of 5 stars</span>
-													</p>
-												</div>
+        {/* PRICE */}
+        <div className="mt-4 flex items-center gap-4">
+          <span className="text-3xl font-bold text-slate-800">
+            ₹{currentPrice}
+          </span>
 
-												<div className='mt-4 lg:mt-6 xl:col-span-2 xl:mt-0'>
-													<div className='space-y-6 text-sm text-gray-500'>
-														{review.comment}
-													</div>
-												</div>
-											</div>
+          {currentOriginalPrice > currentPrice && (
+            <span className="text-lg line-through text-gray-400">
+              ₹{currentOriginalPrice}
+            </span>
+          )}
+        </div>
 
-											<div className='mt-6 flex items-center text-sm lg:col-span-4 lg:col-start-1 lg:row-start-1 lg:mt-0 lg:flex-col lg:items-start xl:col-span-3'>
-												<p className='font-medium text-gray-900'>
-													{review.name}
-												</p>
-												<time
-													dateTime={review.createdAt}
-													className='ml-4 border-l border-gray-200 pl-4 text-gray-500 lg:ml-0 lg:mt-2 lg:border-0 lg:pl-0'>
-													{new Date(review.createdAt).toDateString()}
-												</time>
-											</div>
-										</div>
-									))}
-								</div>
-							)}
-						</div>
+        {/* RATING */}
+        <div className="mt-3 text-sm text-gray-600">
+          ⭐ {product.rating} ({product.numReviews} reviews)
+        </div>
 
-						{/* Review Form */}
-						{userInfo ? (
-							<form onSubmit={handleReviewSubmit} className='mt-16 max-w-3xl'>
-								<h2 className='text-lg font-medium text-slate-900'>
-									Write a review
-								</h2>
-								<div className='mt-6 space-y-6'>
-									<div className='flex items-center'>
-										<label
-											htmlFor='rating'
-											className='block text-sm font-medium text-slate-700'>
-											Rating
-										</label>
-										<div className='ml-4 flex items-center gap-1'>
-											{[1, 2, 3, 4, 5].map((value) => (
-												<button
-													key={value}
-													type='button'
-													onClick={() => setRating(value)}
-													className={`${
-														rating >= value
-															? 'text-yellow-400'
-															: 'text-gray-200'
-													} h-6 w-6 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2`}>
-													<StarIcon className='h-6 w-6' />
-												</button>
-											))}
-										</div>
-									</div>
+        <hr className="my-6" />
 
-									<div>
-										<label
-											htmlFor='comment'
-											className='block text-sm font-medium text-slate-700'>
-											Comment
-										</label>
-										<textarea
-											id='comment'
-											rows={4}
-											value={comment}
-											onChange={(e) => setComment(e.target.value)}
-											className='mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
-										/>
-									</div>
+        {/* VARIANT SELECTOR - PLUS MINUS STYLE */}
+{product.variants?.length > 0 && (
+  <div className="mb-6">
+    <label className="block mb-3 text-sm font-medium">
+      Select Size
+    </label>
 
-									<button
-										type='submit'
-										className={`${
-											loadingProductReview
-												? 'cursor-not-allowed opacity-30'
-												: 'hover:bg-indigo-700'
-										} flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-2 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2`}>
-										Submit
-									</button>
-								</div>
-							</form>
-						) : (
-							<div className='mt-16'>
-								<h2 className='text-lg font-medium text-slate-900'>
-									Write a review
-								</h2>
-								<div className='mt-6'>
-									<p className='text-sm text-slate-500'>
-										Please{' '}
-										<Link
-											to='/login'
-											className='text-indigo-600 hover:underline'>
-											sign in
-										</Link>{' '}
-										to write a review.
-									</p>
-								</div>
-							</div>
-						)}
-					</>
-				)}
-			</div>
-		</div>
-	);
+    <div className="flex items-center gap-4">
+
+      {/* Plus Button */}
+      <div className="flex flex-wrap gap-3 mt-4">
+  {product.variants.map((variant) => (
+        <button
+          key={variant._id}
+          onClick={() => {
+            setSelectedVariant(variant);
+            setQty(1);
+          }}
+          className={`min-w-[40px] h-10 px-4 
+                      flex items-center justify-center 
+                      border rounded-full 
+                      text-sm font-medium
+                      transition-all duration-200
+                      ${
+                        selectedVariant?.size === variant.size
+                          ? "bg-black text-white border-black"
+                          : "bg-white text-gray-800 hover:bg-gray-100"
+                      }`}
+        >
+          {variant.size}
+        </button>
+      ))}
+    </div>
+    </div>
+  </div>
+)}
+
+        {/* STOCK */}
+        <div className="mb-6">
+          {currentStock > 0 ? (
+            <span className="text-green-600 font-medium">
+              In Stock
+            </span>
+          ) : (
+            <span className="text-red-500 font-medium">
+              Out of Stock
+            </span>
+          )}
+        </div>
+
+        {/* QTY + BUTTONS */}
+        {currentStock > 0 && (
+          <div className="flex flex-col sm:flex-row gap-4 mb-8">
+            <select
+              value={qty}
+              onChange={(e) => setQty(Number(e.target.value))}
+              className="border rounded-lg p-3 w-32"
+            >
+              {[...Array(currentStock).keys()].map((x) => (
+                <option key={x + 1} value={x + 1}>
+                  {x + 1}
+                </option>
+              ))}
+            </select>
+              <br />
+            <button
+              onClick={addToCartHandler}
+              className="bg-indigo-700 cursor-pointer text-white px-6 py-3 rounded-lg hover:opacity-90 transition"
+            >
+              Add to cart
+            </button>
+          </div>
+        )}
+
+        {/* PRODUCT DETAILS AT BOTTOM */}
+        <div className="border-t pt-8">
+          <h2 className="text-2xl font-semibold mb-4">
+            Product Details
+          </h2>
+
+          <p className="text-gray-700 leading-relaxed">
+            {product.description}
+          </p>
+
+          {product.content && (
+            <div className="mt-4 text-gray-600 leading-relaxed">
+              {product.content}
+            </div>
+          )}
+        </div>
+
+      </div>
+    </div>
+  </div>
+);
 };
 
-export default ProductDetails;
+export default ProductScreen;

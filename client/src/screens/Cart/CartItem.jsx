@@ -50,7 +50,7 @@ const CartItem = ({
 						<div className='absolute right-0 top-0'>
 							<button
 								onClick={() => handleRemoveFromCart(product._id)}
-								className='-m-2 inline-flex p-2 text-slate-400 hover:text-slate-500'>
+								className='-m-2 inline-flex p-2 text-red-400 hover:text-red-500'>
 								<span className='sr-only'>Remove</span>
 								<XMarkIcon className='h-5 w-5' />
 							</button>

@@ -1,196 +1,295 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import { useCreateProductMutation } from '@slices/productApiSlice';
-
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { useCreateProductMutation } from "@slices/productApiSlice";
 
 const ProductCreate = () => {
-
-   const [createProduct, { isLoading }] = useCreateProductMutation();
-
+  const [createProduct, { isLoading }] = useCreateProductMutation();
   const navigate = useNavigate();
 
-  const [name, setName] = useState('');
-  const [price, setPrice] = useState('');
-  const [description, setDescription] = useState('');
-  const [image, setImage] = useState('');
-  const [category, setCategory] = useState('');
-  const [brand, setBrand] = useState('');
-  const [countInStock, setCountInStock] = useState('');
-  const [rating, setRating] = useState('');
-  const [numReviews, setNumReviews] = useState('');
-  const [content, setContent] = useState('');
+  const [formData, setFormData] = useState({
+    name: "",
+    description: "",
+    content: "",
+    image: "",
+    section: "",
+    category: "",
+    subcategory: "",
+    brand: "",
+    price: "",
+    offerPrice: "",
+    countInStock: "",
+    isTopDeal: false,
+    isBestSeller: false,
+    isActive: true,
+  });
+
+  const [variants, setVariants] = useState([]);
+  const [hasVariants, setHasVariants] = useState(false);
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData({
+      ...formData,
+      [name]: type === "checkbox" ? checked : value,
+    });
+  };
+
+  // Add new variant row
+  const addVariant = () => {
+    setVariants([
+      ...variants,
+      { size: "", price: "", offerPrice: "", countInStock: "" },
+    ]);
+  };
+
+  const handleVariantChange = (index, e) => {
+    const updated = [...variants];
+    updated[index][e.target.name] = e.target.value;
+    setVariants(updated);
+  };
+
+  const removeVariant = (index) => {
+    const updated = variants.filter((_, i) => i !== index);
+    setVariants(updated);
+  };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  try {
-    await createProduct({
-      name,
-      price: Number(price),
-      description,
-      image,
-      category,
-      brand,
-      countInStock: Number(countInStock),
-      rating: Number(rating),
-      numReviews: Number(numReviews),
-      content,
-    }).unwrap();
+    try {
+      await createProduct({
+        ...formData,
+        price: Number(formData.price),
+        offerPrice: Number(formData.offerPrice),
+        countInStock: Number(formData.countInStock),
+        variants: hasVariants
+          ? variants.map((v) => ({
+              size: v.size,
+              price: Number(v.price),
+              offerPrice: Number(v.offerPrice),
+              countInStock: Number(v.countInStock),
+            }))
+          : [],
+      }).unwrap();
 
-    toast.success('Product created successfully');
-    navigate('/admin/productlist');
-  } catch (error) {
-    toast.error(error?.data?.message || error?.error);
-  }
-
-    // 🔜 Next step we connect backend API
-    navigate('/admin/productlist');
+      toast.success("Product created successfully");
+      navigate("/admin/productlist");
+    } catch (error) {
+      toast.error(error?.data?.message || error?.error);
+    }
   };
 
   return (
     <div className="bg-white">
-      <div className="mx-auto max-w-3xl px-4 py-10">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">
-          Create Product
-        </h1>
+      <div className="max-w-4xl mx-auto px-4 py-10">
+        <h1 className="text-3xl font-bold mb-8">Create Product</h1>
 
         <form onSubmit={handleSubmit} className="space-y-6">
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Product Name
-            </label>
+          {/* Basic Info */}
+          <input
+            type="text"
+            name="name"
+            placeholder="Product Name"
+            onChange={handleChange}
+            required
+            className="w-full border p-2 rounded"
+          />
+
+          <input
+            type="text"
+            name="image"
+            placeholder="Image URL"
+            onChange={handleChange}
+            required
+            className="w-full border p-2 rounded"
+          />
+
+          <textarea
+            name="description"
+            placeholder="Short Description"
+            onChange={handleChange}
+            required
+            className="w-full border p-2 rounded"
+          />
+
+          <textarea
+            name="content"
+            placeholder="Full Content"
+            onChange={handleChange}
+            required
+            className="w-full border p-2 rounded"
+          />
+
+          {/* Category Info */}
+          <div className="grid grid-cols-2 gap-4">
             <input
               type="text"
-              value={name}
-              onChange={(e)=>setName(e.target.value)}
+              name="section"
+              placeholder="Section"
+              onChange={handleChange}
               required
-              className="mt-1 block w-full border rounded-md p-2"
+              className="border p-2 rounded"
             />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Price
-            </label>
-            <input
-              type="number"
-              value={price}
-              onChange={(e)=>setPrice(e.target.value)}
-              required
-              className="mt-1 block w-full border rounded-md p-2"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Image URL
-            </label>
             <input
               type="text"
-              value={image}
-              onChange={(e)=>setImage(e.target.value)}
+              name="category"
+              placeholder="Category"
+              onChange={handleChange}
               required
-              className="mt-1 block w-full border rounded-md p-2"
+              className="border p-2 rounded"
             />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Brand
-            </label>
             <input
               type="text"
-              value={brand}
-              onChange={(e)=>setBrand(e.target.value)}
+              name="subcategory"
+              placeholder="Subcategory"
+              onChange={handleChange}
               required
-              className="mt-1 block w-full border rounded-md p-2"
+              className="border p-2 rounded"
             />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Category
-            </label>
             <input
               type="text"
-              value={category}
-              onChange={(e)=>setCategory(e.target.value)}
+              name="brand"
+              placeholder="Brand"
+              onChange={handleChange}
               required
-              className="mt-1 block w-full border rounded-md p-2"
+              className="border p-2 rounded"
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Count In Stock
-            </label>
+          {/* Variant Toggle */}
+          <div className="flex items-center gap-3">
             <input
-              type="number"
-              value={countInStock}
-              onChange={(e)=>setCountInStock(e.target.value)}
-              required
-              className="mt-1 block w-full border rounded-md p-2"
+              type="checkbox"
+              checked={hasVariants}
+              onChange={() => setHasVariants(!hasVariants)}
             />
+            <label>This product has size variants (TV etc.)</label>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Rating
-            </label>
-            <input
-              type="number"
-              step="0.1"
-              value={rating}
-              onChange={(e)=>setRating(e.target.value)}
-              className="mt-1 block w-full border rounded-md p-2"
-            />
-          </div>
+          {/* Normal Product Pricing */}
+          {!hasVariants && (
+            <div className="grid grid-cols-3 gap-4">
+              <input
+                type="number"
+                name="price"
+                placeholder="Price"
+                onChange={handleChange}
+                className="border p-2 rounded"
+              />
+              <input
+                type="number"
+                name="offerPrice"
+                placeholder="Offer Price"
+                onChange={handleChange}
+                className="border p-2 rounded"
+              />
+              <input
+                type="number"
+                name="countInStock"
+                placeholder="Stock"
+                onChange={handleChange}
+                className="border p-2 rounded"
+              />
+            </div>
+          )}
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Number of Reviews
-            </label>
-            <input
-              type="number"
-              value={numReviews}
-              onChange={(e)=>setNumReviews(e.target.value)}
-              className="mt-1 block w-full border rounded-md p-2"
-            />
-          </div>
+          {/* Variants Section */}
+          {hasVariants && (
+            <div className="space-y-4">
+              <button
+                type="button"
+                onClick={addVariant}
+                className="bg-gray-200 px-4 py-2 rounded"
+              >
+                + Add Variant
+              </button>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Description
-            </label>
-            <textarea
-              rows="3"
-              value={description}
-              onChange={(e)=>setDescription(e.target.value)}
-              required
-              className="mt-1 block w-full border rounded-md p-2"
-            />
-          </div>
+              {variants.map((variant, index) => (
+                <div key={index} className="grid grid-cols-4 gap-3">
+                  <input
+                    type="text"
+                    name="size"
+                    placeholder="Size (32, 43...)"
+                    value={variant.size}
+                    onChange={(e) => handleVariantChange(index, e)}
+                    className="border p-2 rounded"
+                  />
+                  <input
+                    type="number"
+                    name="price"
+                    placeholder="Price"
+                    value={variant.price}
+                    onChange={(e) => handleVariantChange(index, e)}
+                    className="border p-2 rounded"
+                  />
+                  <input
+                    type="number"
+                    name="offerPrice"
+                    placeholder="Offer Price"
+                    value={variant.offerPrice}
+                    onChange={(e) => handleVariantChange(index, e)}
+                    className="border p-2 rounded"
+                  />
+                  <input
+                    type="number"
+                    name="countInStock"
+                    placeholder="Stock"
+                    value={variant.countInStock}
+                    onChange={(e) => handleVariantChange(index, e)}
+                    className="border p-2 rounded"
+                  />
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Content
+                  <button
+                    type="button"
+                    onClick={() => removeVariant(index)}
+                    className="text-red-500 text-sm"
+                  >
+                    Remove
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Flags */}
+          <div className="flex gap-6">
+            <label>
+              <input
+                type="checkbox"
+                name="isTopDeal"
+                onChange={handleChange}
+              />{" "}
+              Top Deal
             </label>
-            <textarea
-              rows="6"
-              value={content}
-              onChange={(e)=>setContent(e.target.value)}
-              className="mt-1 block w-full border rounded-md p-2"
-            />
+
+            <label>
+              <input
+                type="checkbox"
+                name="isBestSeller"
+                onChange={handleChange}
+              />{" "}
+              Best Seller
+            </label>
+
+            <label>
+              <input
+                type="checkbox"
+                name="isActive"
+                defaultChecked
+                onChange={handleChange}
+              />{" "}
+              Active
+            </label>
           </div>
 
           <div className="flex justify-end">
             <button
-            type="submit"
-            className="bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700"
+              type="submit"
+              className="bg-indigo-600 text-white px-6 py-2 rounded hover:bg-indigo-700"
             >
-            {isLoading ? 'Creating...' : 'Create Product'}
+              {isLoading ? "Creating..." : "Create Product"}
             </button>
           </div>
 

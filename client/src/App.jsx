@@ -31,6 +31,7 @@ import Product from '@components/Product';
 import UserCreate from '@screens/UserCreate/UserCreate';
 import ProductCreate from '@screens/ProductCreate';
 import MyOrdersScreen from '@screens/MyOrder';
+import ShopPage from '@components/ShopPage';
 
 const router = createBrowserRouter([
 	{
@@ -68,8 +69,8 @@ const router = createBrowserRouter([
 				element: <CartScreen />,
 			},
 			{
-				path: '/about',
-				element: <About />
+				path: '/shop',
+				element: <ShopPage />
 			},
 			{
 				path: '#products',

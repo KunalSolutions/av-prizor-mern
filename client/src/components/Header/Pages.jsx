@@ -2,47 +2,46 @@ import { NavLink } from "react-router-dom";
 
 const Pages = () => {
   const baseStyle =
-    "text-sm font-medium text-indigo-500 transition duration-200";
-
-  const activeStyle =
-    "underline underline-offset-4 decoration-2 text-black  ";
-
-  const inactiveStyle =
-    "text-slate-700 hover:text-indigo-600";
+    "relative text-sm font-medium text-white transition-all duration-300";
 
   return (
-    <nav className="hidden md:flex items-center gap-8">
+    <nav className="hidden md:flex items-center gap-10">
       
       <NavLink
         to="/"
         end
         className={({ isActive }) =>
-          `${baseStyle} ${isActive ? activeStyle : inactiveStyle}`
+          `${baseStyle} ${
+            isActive
+              ? "after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-full after:bg-white"
+              : "hover:opacity-80"
+          }`
         }
       >
         Home
       </NavLink>
 
       <NavLink
-        to="/about"
+        to="/shop"
         className={({ isActive }) =>
-          `${baseStyle} ${isActive ? activeStyle : inactiveStyle}`
+          `${baseStyle} ${
+            isActive
+              ? "after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-full after:bg-white"
+              : "hover:opacity-80"
+          }`
         }
       >
-        About
+        Shop
       </NavLink>
-
-      {/* <a
-        href="/#products"
-        className="text-sm font-medium text-slate-700 hover:text-indigo-600 transition duration-200"
-      >
-        Product
-      </a> */}
 
       <NavLink
         to="/blog"
         className={({ isActive }) =>
-          `${baseStyle} ${isActive ? activeStyle : inactiveStyle}`
+          `${baseStyle} ${
+            isActive
+              ? "after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-full after:bg-white"
+              : "hover:opacity-80"
+          }`
         }
       >
         Blog
@@ -51,7 +50,11 @@ const Pages = () => {
       <NavLink
         to="/contact"
         className={({ isActive }) =>
-          `${baseStyle} ${isActive ? activeStyle : inactiveStyle}`
+          `${baseStyle} ${
+            isActive
+              ? "after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-full after:bg-white"
+              : "hover:opacity-80"
+          }`
         }
       >
         Contact

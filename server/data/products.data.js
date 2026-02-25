@@ -1,110 +1,128 @@
-export default [
-	{
-		name: "PZTFHD-24N",
-		price: 39999,
-		description:
-			'A light and airy summer dress perfect for casual outings. Features a floral pattern and adjustable straps.',
-		image: '/images/01.webp',
-		category: "24” FULL HD TV",
-		brand: 'PRIZOR',
-		countInStock: 20,
-		rating: 3.8,
-		numReviews: 120,
-		content: `PRIZOR TV 24 INCH
-				CONNECTIVITY: 2 HDMI  & 1VGA AND 2 USB PORTS
-				SOUND: 12 WATTS SPEAKERS WITH DOLBY AUDIO AND DTS VIRTUAL X
-				1080P RESOLUTION SUPPORTED
-				ATTRACTIVE PANNEL
-				24 INCH SCREEN`,
-	},
-	{
-		name: "PZTFHD-32N",
-		price: 49999,
-		description:
-			'A light and airy summer dress perfect for casual outings. Features a floral pattern and adjustable straps.',
-		image: '/images/02.webp',
-		category: "32” FULL HD TV",
-		brand: 'PRIZOR',
-		countInStock: 20,
-		rating: 4.8,
-		numReviews: 80,
-		content: `PRIZOR  TV 32 INCH
-				CONNECTIVITY: 2 HDMI  & 1VGA AND 2 USB PORTS
-				SOUND: 12 WATTS SPEAKERS WITH DOLBY AUDIO AND DTS VIRTUAL X
-				1080P RESOLUTION SUPPORTED
-				ATTRACTIVE PANNEL
-				32 INCH SCREEN`,
-	},
-	{
-		name: "PRIZ-32FHD-FL",
-		price: 79999,
-		description:
-			'A light and airy summer dress perfect for casual outings. Features a floral pattern and adjustable straps.',
-		image: '/images/Monitor-1.webp',
-		category: "32” 4K MONITOR FRAMLESS",
-		brand: 'PRIZOR',
-		countInStock: 20,
-		rating: 2.8,
-		numReviews: 50,
-		content: `UTION
-FRAMLESS MONITOR
-Automatically Detect The Resolution Of The Input Signal At The Bottom Left Of The Screen When Starting Up, And The Definition Speaks With Data
-Clarity: Delicate And Lifelike , Conveying True Colors, Showing True Colors
-Bright: Image Quality Is Improved, Only For Better Presentation
-Industrial Screen, High Brightness, High Contrast
-Adopt High-precision Standard Regulated Power Supply, Specially Designed For Industrial Equipment, Support 24 Hours × 365 Days Uninterrupted Work
-Using 10 Bit Image Chip Processing Technology, High-pixel Progressive Scanning, Fine And Lifelike Picture Quality
-Support Intelligent 3D Noise Reduction, Afterimage Elimination Function, Dynamic Brightness, Contrast Color Optimization Technology
-Apply The World’s Leading Liquid Crystal Drive Scheme To Accurately Restore The Front-end Signal, With A Strong Sense Of Reality
-Liquid Crystal Has Small Size, Low Energy Consumption, Zero Radiation, Stable Image, No Impact On Eyes, Natural And Healthy
-5 Ms Extremely Fast Response, Avoiding Image Smearing During High-speed Operation Using Nanotechnology, The Picture Is More Three-dimensional And Transparent`,
-	},
-	{
-		name: "PRIZ-24FHD-FL",
-		price: 89999,
-		description:
-			'A light and airy summer dress perfect for casual outings. Features a floral pattern and adjustable straps.',
-		image: '/images/Monitor-2.webp',
-		category: "24” 4K MONITOR FRAMLESS",
-		brand: 'PRIZOR',
-		countInStock: 20,
-		rating: 4.8,
-		numReviews: 62,
-		content: `S MONITOR
-Automatically Detect The Resolution Of The Input Signal At The Bottom Left Of The Screen When Starting Up, And The Definition Speaks With Data
-Clarity: Delicate And Lifelike , Conveying True Colors, Showing True Colors
-Bright: Image Quality Is Improved, Only For Better Presentation
-Industrial Screen, High Brightness, High Contrast
-Adopt High-precision Standard Regulated Power Supply, Specially Designed For Industrial Equipment, Support 24 Hours × 365 Days Uninterrupted Work
-Using 10 Bit Image Chip Processing Technology, High-pixel Progressive Scanning, Fine And Lifelike Picture Quality
-Support Intelligent 3D Noise Reduction, Afterimage Elimination Function, Dynamic Brightness, Contrast Color Optimization Technology
-Apply The World’s Leading Liquid Crystal Drive Scheme To Accurately Restore The Front-end Signal, With A Strong Sense Of Reality
-Liquid Crystal Has Small Size, Low Energy Consumption, Zero Radiation, Stable Image, No Impact On Eyes, Natural And Healthy
-5 Ms Extremely Fast Response, Avoiding Image Smearing During High-speed Operation Using Nanotechnology, The Picture Is More Three-dimensional And Transparent`,
-	},
-	{
-		name: "PRIZ-24FHD-M",
-		price: 89999,
-		description:
-			'A light and airy summer dress perfect for casual outings. Features a floral pattern and adjustable straps.',
-		image: '/images/Monitor-3.webp',
-		category: "24” 4K MONITOR",
-		brand: 'PRIZOR',
-		countInStock: 20,
-		rating: 6.8,
-		numReviews: 22,
-		content: `RES
-4K RESOLUTION
-Automatically Detect The Resolution Of The Input Signal At The Bottom Left Of The Screen When Starting Up, And The Definition Speaks With Data
-Clarity: Delicate And Lifelike , Conveying True Colors, Showing True Colors
-Bright: Image Quality Is Improved, Only For Better Presentation
-Industrial Screen, High Brightness, High Contrast
-Adopt High-precision Standard Regulated Power Supply, Specially Designed For Industrial Equipment, Support 24 Hours × 365 Days Uninterrupted Work
-Using 10 Bit Image Chip Processing Technology, High-pixel Progressive Scanning, Fine And Lifelike Picture Quality
-Support Intelligent 3D Noise Reduction, Afterimage Elimination Function, Dynamic Brightness, Contrast Color Optimization Technology
-Apply The World’s Leading Liquid Crystal Drive Scheme To Accurately Restore The Front-end Signal, With A Strong Sense Of Reality
-Liquid Crystal Has Small Size, Low Energy Consumption, Zero Radiation, Stable Image, No Impact On Eyes, Natural And Healthy
-5 Ms Extremely Fast Response, Avoiding Image Smearing During High-speed Operation Using Nanotechnology, The Picture Is More Three-dimensional And Transparent`,
-	},
-	
+const products = [
+  {
+    name: "TRS Connectors",
+    isTopDeal: true,
+    isBestSeller: true,
+    price: 699,
+    offerPrice: 459,
+    section: "Electronics",
+    category: "Audio",
+    subcategory: "Connectors",
+    description:
+      "A TRS (Tip-Ring-Sleeve) connector is a 3-pole audio plug used for balanced mono or unbalanced stereo signals.",
+    image: "/images/connector1.jpg",
+    brand: "xyz",
+    countInStock: 10,
+    rating: 3.8,
+    numReviews: 10,
+    content:
+      "A TRS connector features a tip (left/positive), ring (right/negative), and sleeve (ground). Commonly found in 3.5mm and 1/4-inch sizes, essential for headphones, microphones, and studio gear.",
+  },
+  {
+    name: "HDMI Face Plate",
+    isTopDeal: true,
+    isBestSeller: true,
+    price: 899,
+    offerPrice: 599,
+    section: "Electronics",
+    category: "Audio",
+    subcategory: "HDMI",
+    description:
+      "HDMI Multimedia Modular Wall Socket Face Plate for Home/Office use.",
+    image: "/images/HDMI1.webp",
+    brand: "xyz",
+    countInStock: 12,
+    rating: 3.1,
+    numReviews: 10,
+    content:
+      "Includes 1 HDMI port. Supports resolution up to 1080p. Suitable for HDTV, DVD players, set-top boxes. Made from durable polycarbonate material.",
+  },
+  {
+    name: "HDMI Cable",
+    isTopDeal: true,
+    isBestSeller: false,
+    price: 7999,
+    offerPrice: 799,
+    section: "Electronics",
+    category: "Audio",
+    subcategory: "Cable",
+    description:
+      "Honeywell HDMI Cable v2.0 with Ethernet, supports 4K@60Hz Ultra HD.",
+    image: "/images/HDMI2.jpg",
+    brand: "xyz",
+    countInStock: 15,
+    rating: 4.8,
+    numReviews: 70,
+    content:
+      "18GBPS transmission speed. Compatible with laptops, TVs, gaming consoles, and set-top boxes.",
+  },
+  {
+    name: "Microphone",
+    isTopDeal: true,
+    isBestSeller: false,
+    price: 8599,
+    offerPrice: 8299,
+    section: "Electronics",
+    category: "Audio",
+    subcategory: "Mic",
+    description:
+      "Audio-Technica AT2020 Cardioid Condenser Studio XLR Microphone.",
+    image: "/images/Mic1.jpg",
+    brand: "xyz",
+    countInStock: 11,
+    rating: 4.3,
+    numReviews: 51,
+    content:
+      "Ideal for project and home studio applications. High-quality condenser microphone with professional sound clarity.",
+  },
+  {
+  name: "Smart LED TV",
+  isTopDeal: true,
+  isBestSeller: true,
+  section: "Electronics",
+  category: "Display",
+  subcategory: "TV",
+  description: "Ultra HD 4K Smart LED TV with Dolby Audio.",
+  image: "/images/display.jpg",
+  brand: "xyz",
+  rating: 4.6,
+  numReviews: 120,
+  content:
+    "Crystal clear 4K resolution with smart Android features and built-in apps.",
+
+  variants: [
+    {
+      size: "32",
+      price: 15999,
+      offerPrice: 13999,
+      countInStock: 8,
+    },
+    {
+      size: "43",
+      price: 25999,
+      offerPrice: 22999,
+      countInStock: 6,
+    },
+    {
+      size: "55",
+      price: 39999,
+      offerPrice: 35999,
+      countInStock: 5,
+    },
+    {
+      size: "65",
+      price: 59999,
+      offerPrice: 54999,
+      countInStock: 3,
+    },
+    {
+      size: "75",
+      price: 89999,
+      offerPrice: 82999,
+      countInStock: 2,
+    },
+  ],
+}
 ];
+
+export default products;

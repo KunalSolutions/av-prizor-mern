@@ -55,7 +55,7 @@ const DesktopMenu = () => {
 	}, []);
 
 	return (
-		<nav className='hidden items-center text-black sm:ml-6 sm:flex sm:space-x-8'>
+		<nav className='hidden items-center text-white sm:ml-6 sm:flex sm:space-x-8'>
 
 			<div className='flex items-center gap-2'>
 				<MenuItem url='/cart' label='Cart' icon={ShoppingBagIcon} />
@@ -79,16 +79,16 @@ const DesktopMenu = () => {
 			{userInfo ? (
 				<div className='relative z-50' ref={menuRef}>
 					<button
-						className='focus:outline-offset-3 rounded-full bg-gray-200 p-2 focus:outline focus:outline-2'
+						className='focus:outline-offset-3 rounded-full bg-white text-black p-2 focus:outline focus:outline-2'
 						onClick={() => setIsOpen(!isOpen)}>
 						<UserIcon className='h-5 w-5' />
 					</button>
 
 					{isOpen && (
-						<nav className='absolute right-0 top-10 min-w-48 rounded-lg bg-white shadow-md'>
+						<nav className='absolute right-0 top-10 min-w-48 rounded-lg bg-white text-black shadow-md'>
 							<div className='border-b border-gray-300 p-4 pb-3'>
 								<p className='text-sm leading-normal'>
-									<span className='font-semibold text-gray-900'>
+									<span className='font-semibold text-black'>
 										{userInfo.name}
 									</span>
 									<br />
@@ -97,12 +97,12 @@ const DesktopMenu = () => {
 							</div>
 							<Link
 								to='/profile'
-								className='block px-4 py-2 text-sm text-gray-700 transition-all hover:bg-gray-200 focus:bg-gray-300'>
+								className='block px-4 py-2 text-sm text-slate-950 transition-all hover:bg-gray-200 focus:bg-gray-300'>
 								Profile
 							</Link>
 							<button
 								onClick={handleLogout}
-								className='block w-full px-4 py-2 text-left text-sm text-gray-700 transition-all hover:bg-gray-200 focus:bg-gray-300'>
+								className='block w-full px-4 py-2 text-left text-sm text-slate-950  transition-all hover:bg-gray-200 focus:bg-gray-300'>
 								Logout
 							</button>
 						</nav>
@@ -115,9 +115,11 @@ const DesktopMenu = () => {
 			{userInfo && userInfo.isAdmin && (
 				<div className='relative z-50' ref={adminMenuRef}>
 					<button
-						className='focus:outline-offset-3 rounded-full bg-gray-200 p-2 focus:outline focus:outline-2'
+						className='focus:outline-offset-3 rounded-xl px-2 bg-red-400 text-black p-1 cursor-pointer focus:outline focus:outline-2'
 						onClick={() => setAdminIsOpen(!adminIsOpen)}>
-						<Cog8ToothIcon className='h-5 w-5' />
+						{/* <Cog8ToothIcon className='h-5 w-5' /> */}
+						<h1 className='text-white text-sm'>Dashboard</h1>
+
 					</button>
 
 					{adminIsOpen && (
